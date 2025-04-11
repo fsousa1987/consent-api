@@ -145,5 +145,23 @@ class ConsentApiIntegrationTest {
         assertThat(updated.getAdditionalInfo()).isEqualTo("Atualizado via PUT");
     }
 
+    @Test
+    @Order(6)
+    void shouldDeleteConsentSuccessfully() {
+
+        var saved = repository.save(Consent.builder()
+                .cpf("666.666.666-66")
+                .status(ConsentStatus.EXPIRED)
+                .creationDateTime(LocalDateTime.now())
+                .additionalInfo("Será removido")
+                .build());
+
+        var url = getBaseUrl() + "/" + saved.getId();
+
+        restTemplate.delete(url);
+
+        var exists = repository.findById(saved.getId()).isPresent();
+        assertThat(exists).isFalse();
+    }
 
 }
