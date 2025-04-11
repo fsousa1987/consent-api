@@ -4,6 +4,7 @@ import com.sensedia.sample.consents.client.GitHubClient;
 import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
 import com.sensedia.sample.consents.repository.ConsentHistoryRepository;
@@ -19,8 +20,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ConsentServiceImplTest {
 
@@ -113,6 +113,61 @@ class ConsentServiceImplTest {
         assertThatThrownBy(() -> service.getConsentById(id))
                 .isInstanceOf(com.sensedia.sample.consents.exception.ConsentNotFoundException.class)
                 .hasMessageContaining("Consentimento não encontrado");
+    }
+
+    @Test
+    void shouldUpdateConsentSuccessfully() {
+
+        UUID id = UUID.randomUUID();
+        Consent existing = new Consent();
+        existing.setId(id);
+        existing.setCpf("123.456.789-00");
+        existing.setCreationDateTime(LocalDateTime.now());
+        existing.setStatus(com.sensedia.sample.consents.domain.ConsentStatus.ACTIVE);
+        existing.setAdditionalInfo("Old Info");
+
+        ConsentUpdateDTO request = new ConsentUpdateDTO(
+                com.sensedia.sample.consents.domain.ConsentStatus.REVOKED,
+                LocalDateTime.now().plusDays(2),
+                "New Info"
+        );
+
+        Consent updatedEntity = new Consent();
+        updatedEntity.setId(id);
+        updatedEntity.setCpf(existing.getCpf());
+        updatedEntity.setStatus(request.status());
+        updatedEntity.setExpirationDateTime(request.expirationDateTime());
+        updatedEntity.setAdditionalInfo(request.additionalInfo());
+        updatedEntity.setCreationDateTime(existing.getCreationDateTime());
+
+        when(repository.findById(id)).thenReturn(java.util.Optional.of(existing));
+        doAnswer(invocation -> {
+            ConsentUpdateDTO dto = invocation.getArgument(0);
+            Consent entity = invocation.getArgument(1);
+            entity.setStatus(dto.status());
+            entity.setExpirationDateTime(dto.expirationDateTime());
+            entity.setAdditionalInfo(dto.additionalInfo());
+            return null;
+        }).when(mapper).updateEntityFromDto(request, existing);
+
+        when(repository.save(existing)).thenReturn(updatedEntity);
+        when(mapper.toResponseDTO(updatedEntity)).thenReturn(
+                new com.sensedia.sample.consents.dto.ConsentResponseDTO(
+                        id,
+                        existing.getCpf(),
+                        request.status(),
+                        existing.getCreationDateTime(),
+                        request.expirationDateTime(),
+                        request.additionalInfo()
+                )
+        );
+
+        var response = service.updateConsent(id, request);
+
+        assertThat(response.status()).isEqualTo(request.status());
+        assertThat(response.additionalInfo()).isEqualTo("New Info");
+        verify(mapper).updateEntityFromDto(request, existing);
+        verify(repository).save(existing);
     }
 
 }
