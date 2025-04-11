@@ -1,6 +1,6 @@
 package com.sensedia.sample.consents.mapper;
 
-import com.sensedia.sample.consents.domain.Consent;
+import com.sensedia.sample.consents.domain.model.Consent;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
 import com.sensedia.sample.consents.dto.ConsentUpdateDTO;

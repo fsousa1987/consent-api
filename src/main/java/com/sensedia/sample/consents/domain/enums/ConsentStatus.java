@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.domain;
+package com.sensedia.sample.consents.domain.enums;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -2,7 +2,7 @@ package com.sensedia.sample.consents.exception.handler;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.sensedia.sample.consents.domain.ConsentStatus;
+import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import com.sensedia.sample.consents.exception.ConsentNotFoundException;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import org.springframework.http.HttpStatus;

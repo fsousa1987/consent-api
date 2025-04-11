@@ -1,6 +1,6 @@
 package com.sensedia.sample.consents.dto;
 
-import com.sensedia.sample.consents.domain.ConsentStatus;
+import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;

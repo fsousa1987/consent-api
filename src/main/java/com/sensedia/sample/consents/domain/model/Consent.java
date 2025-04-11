@@ -1,5 +1,6 @@
-package com.sensedia.sample.consents.domain;
+package com.sensedia.sample.consents.domain.model;
 
+import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

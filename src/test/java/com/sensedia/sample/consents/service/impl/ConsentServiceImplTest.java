@@ -1,8 +1,8 @@
 package com.sensedia.sample.consents.service.impl;
 
 import com.sensedia.sample.consents.client.GitHubClient;
-import com.sensedia.sample.consents.domain.Consent;
-import com.sensedia.sample.consents.domain.ConsentStatus;
+import com.sensedia.sample.consents.domain.model.Consent;
+import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
 import com.sensedia.sample.consents.dto.ConsentUpdateDTO;

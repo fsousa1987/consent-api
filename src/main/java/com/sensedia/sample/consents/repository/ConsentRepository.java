@@ -1,6 +1,6 @@
 package com.sensedia.sample.consents.repository;
 
-import com.sensedia.sample.consents.domain.Consent;
+import com.sensedia.sample.consents.domain.model.Consent;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
