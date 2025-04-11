@@ -3,6 +3,7 @@ package com.sensedia.sample.consents.service.impl;
 import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
 import com.sensedia.sample.consents.exception.ConsentNotFoundException;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
@@ -41,21 +42,16 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponseDTO getConsentById(UUID id) {
-        Consent consent = repository.findById(id)
-                .orElseThrow(() -> new ConsentNotFoundException("Consentimento não encontrado para o ID: " + id));
+        Consent consent = verifyIfConsentExists(id);
         return mapper.toResponseDTO(consent);
     }
 
     @Override
-    public ConsentResponseDTO updateConsent(UUID id, ConsentRequestDTO request) {
-        Consent existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consentimento não encontrado"));
+    public ConsentResponseDTO updateConsent(UUID id, ConsentUpdateDTO request) {
+        Consent existing = verifyIfConsentExists(id);
 
-        Consent updated = mapper.toEntity(request);
-        updated.setId(existing.getId());
-        updated.setCreationDateTime(existing.getCreationDateTime());
-
-        return mapper.toResponseDTO(repository.save(updated));
+        mapper.updateEntityFromDto(request, existing);
+        return mapper.toResponseDTO(repository.save(existing));
     }
 
     @Override
@@ -70,6 +66,11 @@ public class ConsentServiceImpl implements ConsentService {
         if (repository.existsByCpf(cpf)) {
             throw new DuplicateCpfException("Já existe um consentimento com este CPF: " + cpf);
         }
+    }
+
+    private Consent verifyIfConsentExists(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ConsentNotFoundException("Consentimento não encontrado para o ID: " + id));
     }
 
 }

@@ -2,6 +2,7 @@ package com.sensedia.sample.consents.rest;
 
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
 import com.sensedia.sample.consents.service.ConsentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class ConsentApi implements IConsentApi {
 	}
 
 	@Override
-	public ResponseEntity<ConsentResponseDTO> updateConsent(UUID id, ConsentRequestDTO dto) {
+	public ResponseEntity<ConsentResponseDTO> updateConsent(UUID id, ConsentUpdateDTO dto) {
 		return ResponseEntity.ok(service.updateConsent(id, dto));
 	}
 

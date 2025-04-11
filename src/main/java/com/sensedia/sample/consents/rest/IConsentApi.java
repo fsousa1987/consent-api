@@ -2,6 +2,7 @@ package com.sensedia.sample.consents.rest;
 
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public interface IConsentApi {
 	ResponseEntity<ConsentResponseDTO> getConsentById(@PathVariable UUID id);
 
 	@PutMapping("/{id}")
-	ResponseEntity<ConsentResponseDTO> updateConsent(@PathVariable UUID id, @RequestBody @Valid ConsentRequestDTO dto);
+	ResponseEntity<ConsentResponseDTO> updateConsent(@PathVariable UUID id, @RequestBody @Valid ConsentUpdateDTO dto);
 
 	@DeleteMapping("/{id}")
 	ResponseEntity<Void> deleteConsent(@PathVariable UUID id);
