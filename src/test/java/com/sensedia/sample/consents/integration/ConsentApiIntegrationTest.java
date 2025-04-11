@@ -1,6 +1,7 @@
 package com.sensedia.sample.consents.integration;
 
 import com.sensedia.sample.consents.ConsentsApplication;
+import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.domain.ConsentStatus;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.repository.ConsentRepository;
@@ -56,6 +57,23 @@ class ConsentApiIntegrationTest {
 
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(repository.findAll()).hasSize(1);
+    }
+
+    @Test
+    @Order(2)
+    void shouldGetConsentById() {
+
+        var saved = repository.save(Consent.builder()
+                .cpf("999.999.999-99")
+                .status(ConsentStatus.ACTIVE)
+                .creationDateTime(LocalDateTime.now())
+                .additionalInfo("Aceite via e-mail")
+                .build());
+
+        var response = restTemplate.getForEntity(getBaseUrl() + "/" + saved.getId(), String.class);
+
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getBody()).contains("999.999.999-99");
     }
 
 }
