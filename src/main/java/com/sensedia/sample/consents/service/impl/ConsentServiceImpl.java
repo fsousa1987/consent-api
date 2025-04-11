@@ -24,7 +24,6 @@ public class ConsentServiceImpl implements ConsentService {
     @Override
     public ConsentResponseDTO createConsent(ConsentRequestDTO request) {
         Consent consent = mapper.toEntity(request);
-        consent.setId(UUID.randomUUID());
         consent.setCreationDateTime(LocalDateTime.now());
         return mapper.toResponseDTO(repository.save(consent));
     }
