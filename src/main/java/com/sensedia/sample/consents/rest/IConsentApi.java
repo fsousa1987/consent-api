@@ -3,8 +3,10 @@ package com.sensedia.sample.consents.rest;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
 import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
+import com.sensedia.sample.consents.dto.PageResponseDTO;
 import com.sensedia.sample.consents.exception.handler.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,6 +52,19 @@ public interface IConsentApi {
 	})
 	@GetMapping
 	ResponseEntity<List<ConsentResponseDTO>> getAllConsents();
+
+	@Operation(
+			summary = "Listar consentimentos com paginação",
+			description = "Retorna uma página de consentimentos conforme os parâmetros informados"
+	)
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = "Página de consentimentos retornada com sucesso")
+	})
+	@GetMapping("/paged")
+	ResponseEntity<PageResponseDTO<ConsentResponseDTO>> getAllConsentsPaged(
+			@Parameter(description = "Número da página (começa em 0)") @RequestParam(defaultValue = "0") int page,
+			@Parameter(description = "Tamanho da página") @RequestParam(defaultValue = "10") int size
+	);
 
 	@Operation(
 			summary = "Buscar consentimento por ID",
