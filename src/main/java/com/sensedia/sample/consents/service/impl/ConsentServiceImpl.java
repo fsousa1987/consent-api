@@ -56,9 +56,7 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public void deleteConsent(UUID id) {
-        if (!repository.existsById(id)) {
-            throw new RuntimeException("Consentimento não encontrado");
-        }
+        verifyIfConsentExists(id);
         repository.deleteById(id);
     }
 
