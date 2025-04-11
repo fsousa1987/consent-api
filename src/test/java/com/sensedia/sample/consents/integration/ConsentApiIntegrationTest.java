@@ -4,6 +4,7 @@ import com.sensedia.sample.consents.ConsentsApplication;
 import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.domain.ConsentStatus;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
+import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
 import com.sensedia.sample.consents.repository.ConsentRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,5 +117,33 @@ class ConsentApiIntegrationTest {
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(response.getBody()).contains("333.333.333-33", "444.444.444-44");
     }
+
+    @Test
+    @Order(5)
+    void shouldUpdateConsentSuccessfully() {
+
+        var saved = repository.save(Consent.builder()
+                .cpf("555.555.555-55")
+                .status(ConsentStatus.ACTIVE)
+                .creationDateTime(LocalDateTime.now())
+                .additionalInfo("Informação original")
+                .build());
+
+        var updateRequest = new ConsentUpdateDTO(
+                ConsentStatus.REVOKED,
+                LocalDateTime.of(2027, 1, 1, 0, 0),
+                "Atualizado via PUT"
+        );
+
+
+        var url = getBaseUrl() + "/" + saved.getId();
+        restTemplate.put(url, updateRequest);
+
+
+        var updated = repository.findById(saved.getId()).orElseThrow();
+        assertThat(updated.getStatus()).isEqualTo(ConsentStatus.REVOKED);
+        assertThat(updated.getAdditionalInfo()).isEqualTo("Atualizado via PUT");
+    }
+
 
 }
