@@ -11,6 +11,7 @@ import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
 import com.sensedia.sample.consents.repository.ConsentHistoryRepository;
 import com.sensedia.sample.consents.repository.ConsentRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,6 +32,8 @@ import static org.mockito.Mockito.*;
 
 class ConsentServiceImplTest {
 
+    private AutoCloseable openMocks;
+
     @InjectMocks
     private ConsentServiceImpl service;
 
@@ -48,7 +51,12 @@ class ConsentServiceImplTest {
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.openMocks(this);
+        openMocks = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        openMocks.close();
     }
 
     @Test
