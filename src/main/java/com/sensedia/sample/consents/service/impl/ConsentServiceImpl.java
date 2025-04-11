@@ -3,6 +3,7 @@ package com.sensedia.sample.consents.service.impl;
 import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.exception.ConsentNotFoundException;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
 import com.sensedia.sample.consents.repository.ConsentRepository;
@@ -41,7 +42,7 @@ public class ConsentServiceImpl implements ConsentService {
     @Override
     public ConsentResponseDTO getConsentById(UUID id) {
         Consent consent = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consentimento não encontrado"));
+                .orElseThrow(() -> new ConsentNotFoundException("Consentimento não encontrado para o ID: " + id));
         return mapper.toResponseDTO(consent);
     }
 
