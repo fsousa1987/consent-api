@@ -1,9 +1,13 @@
 package com.sensedia.sample.consents.exception.handler;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.sensedia.sample.consents.domain.ConsentStatus;
 import com.sensedia.sample.consents.exception.ConsentNotFoundException;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +43,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno no servidor", List.of(ex.getMessage()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleEnumFormat(InvalidFormatException ex) {
+        String field = ex.getPath().stream()
+                .map(JsonMappingException.Reference::getFieldName)
+                .collect(Collectors.joining("."));
+
+        String value = ex.getValue().toString();
+
+        String detail = "Valor inválido '" + value + "' para o campo '" + field +
+                "'. Valores válidos: " + ConsentStatus.valuesList();
+
+        return buildResponse(HttpStatus.BAD_REQUEST, "Erro ao converter valor do campo", List.of(detail));
     }
 
     private ResponseEntity<ApiErrorResponse> buildResponse(HttpStatus status, String message, List<String> details) {
