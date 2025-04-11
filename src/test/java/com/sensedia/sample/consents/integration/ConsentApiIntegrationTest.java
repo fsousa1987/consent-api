@@ -1,17 +1,18 @@
 package com.sensedia.sample.consents.integration;
 
 import com.sensedia.sample.consents.ConsentsApplication;
-import com.sensedia.sample.consents.domain.model.Consent;
 import com.sensedia.sample.consents.domain.enums.ConsentStatus;
+import com.sensedia.sample.consents.domain.model.Consent;
+import com.sensedia.sample.consents.domain.repository.ConsentRepository;
 import com.sensedia.sample.consents.rest.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.rest.dto.ConsentUpdateDTO;
-import com.sensedia.sample.consents.domain.repository.ConsentRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @Import(TestcontainersConfiguration.class)
+@Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ConsentApiIntegrationTest {
 
