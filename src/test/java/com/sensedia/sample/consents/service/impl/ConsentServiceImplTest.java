@@ -9,17 +9,24 @@ import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
 import com.sensedia.sample.consents.repository.ConsentHistoryRepository;
 import com.sensedia.sample.consents.repository.ConsentRepository;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import static org.mockito.Mockito.*;
 
 class ConsentServiceImplTest {
@@ -67,7 +74,7 @@ class ConsentServiceImplTest {
 
         ConsentResponseDTO response = service.createConsent(request);
 
-        assertThat(response.additionalInfo()).isEqualTo("GitHub Bio");
+        AssertionsForClassTypes.assertThat(response.additionalInfo()).isEqualTo("GitHub Bio");
         verify(repository).save(entity);
     }
 
@@ -99,7 +106,7 @@ class ConsentServiceImplTest {
 
         ConsentResponseDTO result = service.getConsentById(id);
 
-        assertThat(result.id()).isEqualTo(id);
+        AssertionsForClassTypes.assertThat(result.id()).isEqualTo(id);
         verify(repository).findById(id);
         verify(mapper).toResponseDTO(entity);
     }
@@ -113,6 +120,54 @@ class ConsentServiceImplTest {
         assertThatThrownBy(() -> service.getConsentById(id))
                 .isInstanceOf(com.sensedia.sample.consents.exception.ConsentNotFoundException.class)
                 .hasMessageContaining("Consentimento não encontrado");
+    }
+
+    @Test
+    void shouldReturnAllConsents() {
+
+        List<Consent> entities = List.of(
+                new Consent(UUID.randomUUID(), "111.111.111-11", com.sensedia.sample.consents.domain.ConsentStatus.ACTIVE, LocalDateTime.now(), null, "info")
+        );
+
+        List<ConsentResponseDTO> dtos = List.of(
+                new ConsentResponseDTO(entities.getFirst().getId(), entities.getFirst().getCpf(), entities.getFirst().getStatus(), entities.getFirst().getCreationDateTime(), null, "info")
+        );
+
+        when(repository.findAll()).thenReturn(entities);
+        when(mapper.toResponseDTO(any())).thenReturn(dtos.getFirst());
+
+        List<ConsentResponseDTO> result = service.getAllConsents();
+
+        assertThat(result).hasSize(1);
+        verify(repository).findAll();
+        verify(mapper, times(1)).toResponseDTO(any());
+    }
+
+    @Test
+    void shouldReturnPagedConsents() {
+
+        int page = 0;
+        int size = 2;
+
+        List<Consent> content = List.of(
+                new Consent(UUID.randomUUID(), "222.222.222-22", com.sensedia.sample.consents.domain.ConsentStatus.ACTIVE, LocalDateTime.now(), null, "info")
+        );
+
+        Page<Consent> consentPage = new PageImpl<>(content, PageRequest.of(page, size), 1);
+
+        when(repository.findAll(any(Pageable.class))).thenReturn(consentPage);
+        when(mapper.toResponseDTO(any())).thenReturn(
+                new ConsentResponseDTO(content.getFirst().getId(), content.getFirst().getCpf(), content.getFirst().getStatus(), content.getFirst().getCreationDateTime(), null, "info")
+        );
+
+        var result = service.getAllConsentsPaged(page, size);
+
+        assertThat(result.content()).hasSize(1);
+        assertThat(result.page()).isEqualTo(page);
+        assertThat(result.size()).isEqualTo(size);
+        assertThat(result.totalPages()).isEqualTo(1);
+        verify(repository).findAll(any(Pageable.class));
+        verify(mapper).toResponseDTO(any());
     }
 
     @Test
@@ -164,8 +219,8 @@ class ConsentServiceImplTest {
 
         var response = service.updateConsent(id, request);
 
-        assertThat(response.status()).isEqualTo(request.status());
-        assertThat(response.additionalInfo()).isEqualTo("New Info");
+        AssertionsForClassTypes.assertThat(response.status()).isEqualTo(request.status());
+        AssertionsForClassTypes.assertThat(response.additionalInfo()).isEqualTo("New Info");
         verify(mapper).updateEntityFromDto(request, existing);
         verify(repository).save(existing);
     }
