@@ -12,29 +12,34 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 @RequiredArgsConstructor
 public class GitHubClient {
 
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl("https://api.github.com/users")
-            .build();
+    private final WebClient.Builder webClientBuilder;
 
-    public String fetchBioOrDefault() {
+    private static final String BASE_URL = "https://api.github.com/users";
+    private static final String DEFAULT_BIO = "Informação externa indisponível";
+
+    public String getUserBioOrDefault(String username) {
         try {
-            GitHubUserResponse response = webClient
+            WebClient client = webClientBuilder
+                    .baseUrl(BASE_URL)
+                    .build();
+
+            GitHubUserResponse response = client
                     .get()
-                    .uri("/martinfowler")
+                    .uri("/{username}", username)
                     .retrieve()
                     .bodyToMono(GitHubUserResponse.class)
                     .block();
 
             return response != null && response.bio() != null
                     ? response.bio()
-                    : "Informação externa indisponível";
+                    : DEFAULT_BIO;
 
         } catch (WebClientResponseException ex) {
-            log.warn("Erro ao consumir API externa do GitHub: {}", ex.getStatusCode());
-            return "Informação externa indisponível";
+            log.warn("Erro ao consumir API do GitHub ({}): {}", username, ex.getStatusCode());
+            return DEFAULT_BIO;
         } catch (Exception ex) {
-            log.error("Erro inesperado ao chamar API externa do GitHub", ex);
-            return "Informação externa indisponível";
+            log.error("Erro inesperado ao chamar API do GitHub para '{}'", username, ex);
+            return DEFAULT_BIO;
         }
     }
 

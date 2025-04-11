@@ -1,5 +1,6 @@
 package com.sensedia.sample.consents.service.impl;
 
+import com.sensedia.sample.consents.client.GitHubClient;
 import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.domain.ConsentHistory;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
@@ -30,6 +31,7 @@ public class ConsentServiceImpl implements ConsentService {
     private final ConsentRepository repository;
     private final ConsentMapper mapper;
     private final ConsentHistoryRepository historyRepository;
+    private final GitHubClient gitHubClient;
 
     @Override
     public ConsentResponseDTO createConsent(ConsentRequestDTO request) {
@@ -37,6 +39,9 @@ public class ConsentServiceImpl implements ConsentService {
 
         Consent consent = mapper.toEntity(request);
         consent.setCreationDateTime(LocalDateTime.now());
+
+        fillAdditionalInfoIfMissing(consent);
+
         return mapper.toResponseDTO(repository.save(consent));
     }
 
@@ -109,5 +114,10 @@ public class ConsentServiceImpl implements ConsentService {
                 .build());
     }
 
+    private void fillAdditionalInfoIfMissing(Consent consent) {
+        if (consent.getAdditionalInfo() == null || consent.getAdditionalInfo().isBlank()) {
+            consent.setAdditionalInfo(gitHubClient.getUserBioOrDefault("fsousa1987"));
+        }
+    }
 
 }
