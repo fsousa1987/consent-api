@@ -1,10 +1,10 @@
 package com.sensedia.sample.consents.rest;
 
-import com.sensedia.sample.consents.dto.ConsentRequestDTO;
-import com.sensedia.sample.consents.dto.ConsentResponseDTO;
-import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
-import com.sensedia.sample.consents.dto.PageResponseDTO;
-import com.sensedia.sample.consents.service.ConsentService;
+import com.sensedia.sample.consents.rest.dto.ConsentRequestDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentUpdateDTO;
+import com.sensedia.sample.consents.rest.dto.PageResponseDTO;
+import com.sensedia.sample.consents.application.service.ConsentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -1,16 +1,17 @@
 package com.sensedia.sample.consents.service.impl;
 
-import com.sensedia.sample.consents.client.GitHubClient;
-import com.sensedia.sample.consents.domain.Consent;
-import com.sensedia.sample.consents.domain.ConsentStatus;
-import com.sensedia.sample.consents.dto.ConsentRequestDTO;
-import com.sensedia.sample.consents.dto.ConsentResponseDTO;
-import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
-import com.sensedia.sample.consents.exception.ConsentNotFoundException;
-import com.sensedia.sample.consents.exception.DuplicateCpfException;
-import com.sensedia.sample.consents.mapper.ConsentMapper;
-import com.sensedia.sample.consents.repository.ConsentHistoryRepository;
-import com.sensedia.sample.consents.repository.ConsentRepository;
+import com.sensedia.sample.consents.application.service.impl.ConsentServiceImpl;
+import com.sensedia.sample.consents.infra.client.GitHubClient;
+import com.sensedia.sample.consents.domain.model.Consent;
+import com.sensedia.sample.consents.domain.enums.ConsentStatus;
+import com.sensedia.sample.consents.rest.dto.ConsentRequestDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentUpdateDTO;
+import com.sensedia.sample.consents.rest.exception.ConsentNotFoundException;
+import com.sensedia.sample.consents.rest.exception.DuplicateCpfException;
+import com.sensedia.sample.consents.rest.mapper.ConsentMapper;
+import com.sensedia.sample.consents.domain.repository.ConsentHistoryRepository;
+import com.sensedia.sample.consents.domain.repository.ConsentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -132,7 +133,7 @@ class ConsentServiceImplTest {
         when(repository.findById(id)).thenReturn(java.util.Optional.empty());
 
         assertThatThrownBy(() -> service.getConsentById(id))
-                .isInstanceOf(com.sensedia.sample.consents.exception.ConsentNotFoundException.class)
+                .isInstanceOf(ConsentNotFoundException.class)
                 .hasMessageContaining("Consentimento não encontrado");
     }
 
@@ -256,7 +257,7 @@ class ConsentServiceImplTest {
         when(repository.findById(id)).thenReturn(java.util.Optional.empty());
 
         assertThatThrownBy(() -> service.deleteConsent(id))
-                .isInstanceOf(com.sensedia.sample.consents.exception.ConsentNotFoundException.class)
+                .isInstanceOf(ConsentNotFoundException.class)
                 .hasMessageContaining("Consentimento não encontrado");
     }
 

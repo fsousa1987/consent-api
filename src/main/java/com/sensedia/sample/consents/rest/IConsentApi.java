@@ -1,10 +1,10 @@
 package com.sensedia.sample.consents.rest;
 
-import com.sensedia.sample.consents.dto.ConsentRequestDTO;
-import com.sensedia.sample.consents.dto.ConsentResponseDTO;
-import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
-import com.sensedia.sample.consents.dto.PageResponseDTO;
-import com.sensedia.sample.consents.exception.handler.ApiErrorResponse;
+import com.sensedia.sample.consents.rest.dto.ConsentRequestDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentUpdateDTO;
+import com.sensedia.sample.consents.rest.dto.PageResponseDTO;
+import com.sensedia.sample.consents.rest.exception.handler.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
