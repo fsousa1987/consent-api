@@ -81,4 +81,38 @@ class ConsentServiceImplTest {
                 .hasMessageContaining("Já existe um consentimento com este CPF");
     }
 
+    @Test
+    void shouldReturnConsentWhenIdExists() {
+
+        UUID id = UUID.randomUUID();
+        Consent entity = new Consent();
+        entity.setId(id);
+        entity.setCpf("123.456.789-00");
+        entity.setCreationDateTime(LocalDateTime.now());
+
+        ConsentResponseDTO responseDTO = new ConsentResponseDTO(
+                id, "123.456.789-00", null, entity.getCreationDateTime(), null, "Info"
+        );
+
+        when(repository.findById(id)).thenReturn(java.util.Optional.of(entity));
+        when(mapper.toResponseDTO(entity)).thenReturn(responseDTO);
+
+        ConsentResponseDTO result = service.getConsentById(id);
+
+        assertThat(result.id()).isEqualTo(id);
+        verify(repository).findById(id);
+        verify(mapper).toResponseDTO(entity);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenIdNotFound() {
+
+        UUID id = UUID.randomUUID();
+        when(repository.findById(id)).thenReturn(java.util.Optional.empty());
+
+        assertThatThrownBy(() -> service.getConsentById(id))
+                .isInstanceOf(com.sensedia.sample.consents.exception.ConsentNotFoundException.class)
+                .hasMessageContaining("Consentimento não encontrado");
+    }
+
 }
