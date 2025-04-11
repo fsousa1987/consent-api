@@ -8,4 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface ConsentRepository extends MongoRepository<Consent, UUID> {
+
+    boolean existsByCpf(String cpf);
+
 }

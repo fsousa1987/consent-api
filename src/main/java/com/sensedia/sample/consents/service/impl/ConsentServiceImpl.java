@@ -3,6 +3,7 @@ package com.sensedia.sample.consents.service.impl;
 import com.sensedia.sample.consents.domain.Consent;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
 import com.sensedia.sample.consents.repository.ConsentRepository;
 import com.sensedia.sample.consents.service.ConsentService;
@@ -23,6 +24,8 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     public ConsentResponseDTO createConsent(ConsentRequestDTO request) {
+        validateDuplicateCpf(request.cpf());
+
         Consent consent = mapper.toEntity(request);
         consent.setCreationDateTime(LocalDateTime.now());
         return mapper.toResponseDTO(repository.save(consent));
@@ -60,6 +63,12 @@ public class ConsentServiceImpl implements ConsentService {
             throw new RuntimeException("Consentimento não encontrado");
         }
         repository.deleteById(id);
+    }
+
+    private void validateDuplicateCpf(String cpf) {
+        if (repository.existsByCpf(cpf)) {
+            throw new DuplicateCpfException("Já existe um consentimento com este CPF: " + cpf);
+        }
     }
 
 }
