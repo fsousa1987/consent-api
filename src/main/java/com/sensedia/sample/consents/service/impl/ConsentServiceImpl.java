@@ -5,6 +5,7 @@ import com.sensedia.sample.consents.domain.ConsentHistory;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
 import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
+import com.sensedia.sample.consents.dto.PageResponseDTO;
 import com.sensedia.sample.consents.exception.ConsentNotFoundException;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
@@ -12,6 +13,9 @@ import com.sensedia.sample.consents.repository.ConsentHistoryRepository;
 import com.sensedia.sample.consents.repository.ConsentRepository;
 import com.sensedia.sample.consents.service.ConsentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +45,24 @@ public class ConsentServiceImpl implements ConsentService {
         return repository.findAll().stream()
                 .map(mapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponseDTO<ConsentResponseDTO> getAllConsentsPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Consent> consentPage = repository.findAll(pageable);
+
+        List<ConsentResponseDTO> content = consentPage.getContent().stream()
+                .map(mapper::toResponseDTO)
+                .toList();
+
+        return new PageResponseDTO<>(
+                content,
+                consentPage.getNumber(),
+                consentPage.getSize(),
+                consentPage.getTotalElements(),
+                consentPage.getTotalPages()
+        );
     }
 
     @Override
