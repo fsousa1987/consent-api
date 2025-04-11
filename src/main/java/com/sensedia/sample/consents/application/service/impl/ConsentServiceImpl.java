@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.service.impl;
+package com.sensedia.sample.consents.application.service.impl;
 
 import com.sensedia.sample.consents.client.GitHubClient;
 import com.sensedia.sample.consents.domain.model.Consent;
@@ -12,7 +12,7 @@ import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
 import com.sensedia.sample.consents.domain.repository.ConsentHistoryRepository;
 import com.sensedia.sample.consents.domain.repository.ConsentRepository;
-import com.sensedia.sample.consents.service.ConsentService;
+import com.sensedia.sample.consents.application.service.ConsentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

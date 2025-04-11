@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.service;
+package com.sensedia.sample.consents.application.service;
 
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
