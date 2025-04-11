@@ -8,8 +8,6 @@ spring:
       uri: mongodb://root:root@localhost:27017/mongo-consent?authSource=admin
 
 management:
-#  server:
-#    base-path: /actuator
   endpoints:
     web:
       exposure:
