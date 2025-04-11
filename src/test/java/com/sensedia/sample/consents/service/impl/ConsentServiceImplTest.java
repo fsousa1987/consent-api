@@ -170,4 +170,38 @@ class ConsentServiceImplTest {
         verify(repository).save(existing);
     }
 
+    @Test
+    void shouldDeleteConsentSuccessfully() {
+
+        UUID id = UUID.randomUUID();
+        Consent existing = new Consent();
+        existing.setId(id);
+        existing.setCpf("123.456.789-00");
+        existing.setCreationDateTime(LocalDateTime.now());
+        existing.setStatus(com.sensedia.sample.consents.domain.ConsentStatus.ACTIVE);
+        existing.setAdditionalInfo("info");
+
+        when(repository.findById(id)).thenReturn(java.util.Optional.of(existing));
+
+        service.deleteConsent(id);
+
+        verify(repository).deleteById(id);
+        verify(historyRepository).save(argThat(history ->
+                history.getConsentId().equals(id) &&
+                        history.getOperation().equals("DELETED") &&
+                        history.getCpf().equals(existing.getCpf())
+        ));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistingConsent() {
+
+        UUID id = UUID.randomUUID();
+        when(repository.findById(id)).thenReturn(java.util.Optional.empty());
+
+        assertThatThrownBy(() -> service.deleteConsent(id))
+                .isInstanceOf(com.sensedia.sample.consents.exception.ConsentNotFoundException.class)
+                .hasMessageContaining("Consentimento não encontrado");
+    }
+
 }
