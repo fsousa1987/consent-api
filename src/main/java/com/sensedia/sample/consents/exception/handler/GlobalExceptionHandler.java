@@ -46,17 +46,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiErrorResponse> handleEnumFormat(InvalidFormatException ex) {
-        String field = ex.getPath().stream()
-                .map(JsonMappingException.Reference::getFieldName)
-                .collect(Collectors.joining("."));
+    public ResponseEntity<ApiErrorResponse> handleNotReadable(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getCause();
+        if (cause instanceof InvalidFormatException ife) {
+            String field = ife.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .collect(Collectors.joining("."));
 
-        String value = ex.getValue().toString();
+            String value = ife.getValue().toString();
 
-        String detail = "Valor inválido '" + value + "' para o campo '" + field +
-                "'. Valores válidos: " + ConsentStatus.valuesList();
+            String detail = "Valor inválido '" + value + "' para o campo '" + field +
+                    "'. Valores válidos: " + ConsentStatus.valuesList();
 
-        return buildResponse(HttpStatus.BAD_REQUEST, "Erro ao converter valor do campo", List.of(detail));
+            return buildResponse(HttpStatus.BAD_REQUEST, "Erro de conversão de valor", List.of(detail));
+        }
+
+        return buildResponse(HttpStatus.BAD_REQUEST, "Erro na leitura da requisição", List.of(ex.getMessage()));
     }
 
     private ResponseEntity<ApiErrorResponse> buildResponse(HttpStatus status, String message, List<String> details) {
