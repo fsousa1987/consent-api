@@ -1,12 +1,14 @@
 package com.sensedia.sample.consents.service.impl;
 
 import com.sensedia.sample.consents.domain.Consent;
+import com.sensedia.sample.consents.domain.ConsentHistory;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentResponseDTO;
 import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
 import com.sensedia.sample.consents.exception.ConsentNotFoundException;
 import com.sensedia.sample.consents.exception.DuplicateCpfException;
 import com.sensedia.sample.consents.mapper.ConsentMapper;
+import com.sensedia.sample.consents.repository.ConsentHistoryRepository;
 import com.sensedia.sample.consents.repository.ConsentRepository;
 import com.sensedia.sample.consents.service.ConsentService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ConsentServiceImpl implements ConsentService {
 
     private final ConsentRepository repository;
     private final ConsentMapper mapper;
+    private final ConsentHistoryRepository historyRepository;
 
     @Override
     public ConsentResponseDTO createConsent(ConsentRequestDTO request) {
@@ -49,14 +52,15 @@ public class ConsentServiceImpl implements ConsentService {
     @Override
     public ConsentResponseDTO updateConsent(UUID id, ConsentUpdateDTO request) {
         Consent existing = verifyIfConsentExists(id);
-
         mapper.updateEntityFromDto(request, existing);
+        saveHistory(existing, "UPDATED");
         return mapper.toResponseDTO(repository.save(existing));
     }
 
     @Override
     public void deleteConsent(UUID id) {
-        verifyIfConsentExists(id);
+        Consent existing = verifyIfConsentExists(id);
+        saveHistory(existing, "DELETED");
         repository.deleteById(id);
     }
 
@@ -70,5 +74,18 @@ public class ConsentServiceImpl implements ConsentService {
         return repository.findById(id)
                 .orElseThrow(() -> new ConsentNotFoundException("Consentimento não encontrado para o ID: " + id));
     }
+
+    private void saveHistory(Consent consent, String operation) {
+        historyRepository.save(ConsentHistory.builder()
+                .consentId(consent.getId())
+                .cpf(consent.getCpf())
+                .status(consent.getStatus())
+                .expirationDateTime(consent.getExpirationDateTime())
+                .additionalInfo(consent.getAdditionalInfo())
+                .operation(operation)
+                .timestamp(LocalDateTime.now())
+                .build());
+    }
+
 
 }
