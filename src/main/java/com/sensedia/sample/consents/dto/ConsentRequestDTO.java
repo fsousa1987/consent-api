@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "Dados de entrada para criar um novo consentimento")
 public record ConsentRequestDTO(
 
         @Schema(description = "CPF do usuário", example = "123.456.789-00")

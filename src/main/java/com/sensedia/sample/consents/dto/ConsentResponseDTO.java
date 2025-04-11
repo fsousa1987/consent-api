@@ -6,7 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Schema(description = "Dados retornados de um consentimento")
 public record ConsentResponseDTO(
+
         @Schema(description = "Identificador único do consentimento", example = "df1d3ef5-b253-4e7b-bf2c-70a0c5df3ae0")
         UUID id,
 

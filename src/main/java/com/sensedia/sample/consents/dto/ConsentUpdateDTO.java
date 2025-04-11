@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "Dados para atualizar um consentimento existente")
 public record ConsentUpdateDTO(
 
         @Schema(description = "Status do consentimento", example = "REVOKED")
