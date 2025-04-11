@@ -5,7 +5,7 @@ import com.sensedia.sample.consents.domain.model.Consent;
 import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import com.sensedia.sample.consents.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
-import com.sensedia.sample.consents.repository.ConsentRepository;
+import com.sensedia.sample.consents.domain.repository.ConsentRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
