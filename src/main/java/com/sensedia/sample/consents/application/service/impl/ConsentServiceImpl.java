@@ -1,5 +1,6 @@
 package com.sensedia.sample.consents.application.service.impl;
 
+import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import com.sensedia.sample.consents.infra.client.GitHubClient;
 import com.sensedia.sample.consents.domain.model.Consent;
 import com.sensedia.sample.consents.domain.model.ConsentHistory;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ConsentServiceImpl implements ConsentService {
+
+    private static final String OPERATION_DELETED = "DELETED";
+    private static final String OPERATION_UPDATED = "UPDATED";
 
     private final ConsentRepository repository;
     private final ConsentMapper mapper;
@@ -80,14 +84,14 @@ public class ConsentServiceImpl implements ConsentService {
     public ConsentResponseDTO updateConsent(UUID id, ConsentUpdateDTO request) {
         Consent existing = verifyIfConsentExists(id);
         mapper.updateEntityFromDto(request, existing);
-        saveHistory(existing, "UPDATED");
+        saveHistory(existing, OPERATION_UPDATED);
         return mapper.toResponseDTO(repository.save(existing));
     }
 
     @Override
     public void deleteConsent(UUID id) {
         Consent existing = verifyIfConsentExists(id);
-        saveHistory(existing, "DELETED");
+        saveHistory(existing, OPERATION_DELETED);
         repository.deleteById(id);
     }
 
@@ -103,10 +107,14 @@ public class ConsentServiceImpl implements ConsentService {
     }
 
     private void saveHistory(Consent consent, String operation) {
+        ConsentStatus statusToSave = operation.equalsIgnoreCase(OPERATION_DELETED)
+                ? ConsentStatus.REVOKED
+                : consent.getStatus();
+
         historyRepository.save(ConsentHistory.builder()
                 .consentId(consent.getId())
                 .cpf(consent.getCpf())
-                .status(consent.getStatus())
+                .status(statusToSave)
                 .expirationDateTime(consent.getExpirationDateTime())
                 .additionalInfo(consent.getAdditionalInfo())
                 .operation(operation)
