@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.exception.handler;
+package com.sensedia.sample.consents.rest.exception.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;

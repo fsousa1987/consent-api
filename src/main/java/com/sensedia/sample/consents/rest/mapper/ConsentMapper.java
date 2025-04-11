@@ -1,9 +1,9 @@
-package com.sensedia.sample.consents.mapper;
+package com.sensedia.sample.consents.rest.mapper;
 
 import com.sensedia.sample.consents.domain.model.Consent;
-import com.sensedia.sample.consents.dto.ConsentRequestDTO;
-import com.sensedia.sample.consents.dto.ConsentResponseDTO;
-import com.sensedia.sample.consents.dto.ConsentUpdateDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentRequestDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentResponseDTO;
+import com.sensedia.sample.consents.rest.dto.ConsentUpdateDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

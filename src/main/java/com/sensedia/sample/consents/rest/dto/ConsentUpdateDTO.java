@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.dto;
+package com.sensedia.sample.consents.rest.dto;
 
 import com.sensedia.sample.consents.domain.enums.ConsentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
