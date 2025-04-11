@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.config;
+package com.sensedia.sample.consents.infra.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

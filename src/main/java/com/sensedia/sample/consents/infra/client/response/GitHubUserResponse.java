@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.client.response;
+package com.sensedia.sample.consents.infra.client.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

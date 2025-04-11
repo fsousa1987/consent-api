@@ -1,4 +1,4 @@
-package com.sensedia.sample.consents.config;
+package com.sensedia.sample.consents.infra.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

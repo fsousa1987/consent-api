@@ -1,6 +1,6 @@
-package com.sensedia.sample.consents.client;
+package com.sensedia.sample.consents.infra.client;
 
-import com.sensedia.sample.consents.client.response.GitHubUserResponse;
+import com.sensedia.sample.consents.infra.client.response.GitHubUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
