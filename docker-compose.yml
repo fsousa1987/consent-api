@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   mongo:
     image: mongo:latest
@@ -9,4 +7,21 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-    restart: unless-stopped
+    networks:
+      - consent-network
+
+  consent-api:
+    build: .
+    container_name: consent-api
+    ports:
+      - "8099:8099"
+    depends_on:
+      - mongo
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    networks:
+      - consent-network
+
+networks:
+  consent-network:
+    driver: bridge
