@@ -30,5 +30,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Dar permissão ao Maven Wrapper
+        run: chmod +x ./mvnw
+
       - name: Rodar testes unitários e de integração
         run: ./mvnw clean verify
