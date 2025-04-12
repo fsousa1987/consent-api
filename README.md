@@ -1,4 +1,3 @@
-```markdown
 # 🛡️ Consent API
 
 API REST para gestão de consentimentos de usuários, desenvolvida como parte de um desafio técnico.  
@@ -16,8 +15,16 @@ Permite criar, listar, atualizar e revogar consentimentos, com histórico de alt
 ---
 
 ## 🚀 Tecnologias
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" width="50"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/maven/maven-original.svg" alt="Maven" width="50"/>
+</p>
 
-- Java 21
+- Java 21 
 - Spring Boot 3.4
 - MongoDB
 - Testcontainers (para testes de integração)
