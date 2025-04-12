@@ -19,6 +19,7 @@ services:
       - mongo
     environment:
       SPRING_PROFILES_ACTIVE: test
+      MONGO_URI: mongodb://root:root@mongo:27017/mongo-consent?authSource=admin
     networks:
       - consent-network
 

@@ -5,7 +5,7 @@ spring:
     name: consents
   data:
     mongodb:
-      uri: mongodb://root:root@localhost:27017/mongo-consent?authSource=admin
+      uri: ${MONGO_URI:mongodb://root:root@localhost:27017/mongo-consent?authSource=admin}
 
 management:
   endpoints:
