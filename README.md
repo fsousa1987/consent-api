@@ -120,23 +120,19 @@ Content-Type: application/json
 
 ---
 
-## 📚 Swagger (OpenAPI)
+## 🔍 Acesso às interfaces web
 
-Acesse a documentação completa da API:
+Durante a execução via Docker Compose, as seguintes interfaces estarão disponíveis:
 
-```
-http://localhost:8099/swagger-ui.html
-```
+- 🔧 **Swagger/OpenAPI**: documentação da API\
+  [http://localhost:8099/swagger-ui.html](http://localhost:8099/swagger-ui.html)
 
----
+- 📈 **Prometheus UI**: visualização e consulta de métricas\
+  [http://localhost:9090](http://localhost:9090)
 
-## 📈 Métricas Prometheus
-
-Expostas via Spring Boot Actuator:
-
-```
-GET /actuator/prometheus
-```
+- 📊 **Mongo Express**: interface web para visualizar dados da base MongoDB\
+  [http://localhost:8081](http://localhost:8081)\
+  **Login:** `admin` / `admin123`
 
 ---
 
@@ -164,13 +160,6 @@ O campo `bio` do usuário é utilizado como valor padrão.
 
 ---
 
-## 🧑‍💻 Autor
-
-Francisco Edglei de Sousa  
-[GitHub: @fsousa1987](https://github.com/fsousa1987)
-
----
-
 ## 🧼 Qualidade e boas práticas
 
 - ✅ Código limpo e organizado
@@ -180,3 +169,10 @@ Francisco Edglei de Sousa
 - ✅ Commits semânticos
 - ✅ Documentação automatizada com Swagger
 - ✅ Pipeline CI no GitHub Actions
+
+---
+
+## 🧑‍💻 Autor
+
+Francisco Edglei de Sousa  
+[GitHub: @fsousa1987](https://github.com/fsousa1987)
