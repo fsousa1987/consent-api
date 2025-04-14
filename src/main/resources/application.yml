@@ -12,8 +12,6 @@ management:
     web:
       exposure:
         include: health, metrics, prometheus
-  prometheus:
-    metrics:
-      export:
-        enabled: true
-
+  endpoint:
+    prometheus:
+      access: unrestricted
