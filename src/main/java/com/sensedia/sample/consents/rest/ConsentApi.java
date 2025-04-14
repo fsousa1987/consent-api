@@ -14,6 +14,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
+import static com.sensedia.sample.consents.infra.util.LogUtils.maskCpf;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -23,7 +25,7 @@ public class ConsentApi implements IConsentApi {
 
     @Override
     public ResponseEntity<ConsentResponseDTO> createConsent(ConsentRequestDTO dto) {
-        log.info("Requisição recebida para criar consentimento: CPF={}", dto.cpf());
+        log.info("Requisição recebida para criar consentimento: CPF={}", maskCpf(dto.cpf()));
         ConsentResponseDTO response = service.createConsent(dto);
         URI location = URI.create("/consents/" + response.id());
         return ResponseEntity.created(location).body(response);
