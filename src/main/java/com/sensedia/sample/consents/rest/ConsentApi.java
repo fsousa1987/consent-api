@@ -1,15 +1,16 @@
 package com.sensedia.sample.consents.rest;
 
+import com.sensedia.sample.consents.application.service.ConsentService;
 import com.sensedia.sample.consents.rest.dto.ConsentRequestDTO;
 import com.sensedia.sample.consents.rest.dto.ConsentResponseDTO;
 import com.sensedia.sample.consents.rest.dto.ConsentUpdateDTO;
 import com.sensedia.sample.consents.rest.dto.PageResponseDTO;
-import com.sensedia.sample.consents.application.service.ConsentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +23,9 @@ public class ConsentApi implements IConsentApi {
 
     @Override
     public ResponseEntity<ConsentResponseDTO> createConsent(ConsentRequestDTO dto) {
-        return ResponseEntity.ok(service.createConsent(dto));
+        ConsentResponseDTO response = service.createConsent(dto);
+        URI location = URI.create("/consents/" + response.id());
+        return ResponseEntity.created(location).body(response);
     }
 
     @Override
